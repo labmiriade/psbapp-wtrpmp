@@ -1,0 +1,42 @@
+<div class="card flex-grow-1">
+  <div class="card-body">
+    <a (click)="onSelectClick()" class="search-card__place-link">
+      <div class="d-flex">
+        <div class="flex-grow-1">
+          <div class="card-title flex-grow-1">
+            <h5>
+              <fa-icon *ngIf="place?.community" icon="users" ngbTooltip="Da community" placement="right"></fa-icon>
+              <strong> {{ name }}</strong>
+            </h5>
+          </div>
+          <div class="card-subtitle flex-grow-1">
+            <div>{{ street }}</div>
+            <div>{{ city }}</div>
+          </div>
+        </div>
+        <div class="flex-shrink-1 search-card__select-button">
+          <fa-icon class="text-secondary" icon="angle-right"></fa-icon>
+        </div>
+      </div>
+    </a>
+    <div class="d-flex justify-content-center">
+      <div *ngIf="loading" class="mx-2 mt-2">
+        <app-loading [small]="true"></app-loading>
+      </div>
+
+      <button
+        *ngIf="!loading"
+        type="button"
+        class="btn btn-primary mx-2 mt-2"
+        ngbTooltip="Mi piace"
+        [disabled]="isLiked"
+        (click)="onLikeClick()"
+      >
+        <div>
+          <fa-icon icon="thumbs-up"></fa-icon>
+          {{ place?.likes }}
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

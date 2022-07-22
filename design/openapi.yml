@@ -1,0 +1,234 @@
+openapi: '3.0.3'
+info:
+  title: 'PSBAPP WtrPmp API'
+  version: '2021-05-27'
+
+paths:
+  /p/{placeId}:
+    parameters:
+      - in: path
+        schema:
+          type: string
+        name: placeId
+        required: true
+    get:
+      tags: [End User]
+      description: Ottieni informazioni su un luogo
+      responses:
+        200:
+          description: Informazioni sul luogo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceInfo'
+        444:
+          description: Luogo non esistente
+  /p/{placeId}/like:
+    parameters:
+      - in: path
+        schema:
+          type: string
+        name: placeId
+        required: true
+    put:
+      tags: [End User]
+      security:
+        - captchaKey: []
+      description: mette like ad un punto
+      responses:
+        200:
+          description: Informazioni sul luogo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceInfo'
+        444:
+          description: Luogo non esistente
+  /p:
+    post:
+      tags: [End User]
+      security:
+        - captchaKey: []
+      description: Crea un punto community
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - description
+              properties:
+                description:
+                  type: string
+                  example: Fontanella al parco
+                address:
+                  type: string
+                  example: Via Castelletto 11, 36016, Thiene
+                lat:
+                  type: string
+                  example: 45.9462947204
+                lon:
+                  type: string
+                  example: 11.1383841759
+      responses:
+        200:
+          description: OK
+  ##### SEARCH API
+  /search/p:
+    get:
+      tags: [End User, Search]
+      parameters:
+        - name: q
+          in: query
+          description: >-
+            The text for full text search on all fields
+          required: false
+          schema:
+            type: string
+        - name: near
+          in: query
+          description: >-
+            Latitude and longitude for the search
+          required: false
+          schema:
+            type: string
+            example: 45.1234,11.3749
+            pattern: '\d{1,2}(.\d*)\,\d{1,2}(.\d*)'
+        - name: cat
+          in: query
+          description: >-
+            Category filter for the search
+          required: false
+          schema:
+            type: string
+      summary: Search places
+      description: >-
+        At least one of the 'q' or the 'near' parameters is required
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceList'
+
+  /search/location/text:
+    get:
+      tags: [End User, Search]
+      parameters:
+        - name: text
+          in: query
+          description: the text for location search
+          required: true
+          schema:
+            type: string
+      summary: search text for coordinates
+      description: Searches the text and returns coordinates or suggestions
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextSearchResponse'
+
+  /search/location/position:
+    get:
+      tags: [End User, Search]
+      parameters:
+        - name: lat
+          in: query
+          description: the latitude for location search
+          required: true
+          schema:
+            type: string
+        - name: lon
+          in: query
+          description: the longitude for location search
+          required: true
+          schema:
+            type: string
+      summary: search coordinates for text
+      description: Searches the coordinates and returns an address
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionSearchResponse'
+
+components:
+  schemas:
+    PlaceList:
+      type: object
+      properties:
+        places:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceInfo'
+    PlaceInfo:
+      type: object
+      properties:
+        placeId:
+          type: string
+          example: thn1
+        istatCode:
+          type: string
+          example: '24100'
+        streetName:
+          type: string
+          example: Via Milani
+        streetNumber:
+          type: string
+          example: '1'
+        city:
+          type: string
+          example: Thiene
+        province:
+          type: string
+          example: VI
+        notes:
+          type: string
+          example: VI
+        lat:
+          type: string
+          example: 45.50593824
+        lon:
+          type: string
+          example: 12.293843284
+        searchable:
+          type: boolean
+        community:
+          type: boolean
+        likes:
+          type: number
+    PositionSearchResponse:
+      type: object
+      properties:
+        address:
+          type: string
+          example: Via Castelletto 11, Thiene, 36016
+    TextSearchResponse:
+      type: object
+      properties:
+        coordinates:
+          type: object
+          properties:
+            latitude:
+              type: string
+              example: 45.50593824
+            longitude:
+              type: string
+              example: 12.293843284
+        suggestions:
+          type: array
+          items:
+            type: string
+            example: Via Castelletto 11, Thiene, 36016
+
+tags:
+  - name: End User
+    description: Chiamate utilizzate dall'end user, non sono autenticate.
+  - name: Search
+    description: Chiamate per cercare i luoghi

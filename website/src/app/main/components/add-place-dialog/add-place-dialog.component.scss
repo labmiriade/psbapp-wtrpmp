@@ -1,0 +1,21 @@
+.add-place-dialog {
+  color: black;
+}
+
+.add-place-dialog__title {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.add-place-dialog__button {
+  border-radius: 1rem;
+}
+
+.add-place-dialog__footer-item {
+  flex: 1 1 0;
+  width: 33%;
+}
+
+.add-place-dialog__map {
+  height: 100%;
+}

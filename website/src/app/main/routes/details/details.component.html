@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center py-2 mb-3">
+  <div class="col-12">
+    <div class="d-flex justify-content-center">
+      <button type="button" class="btn btn-dark btn-sm mt-2" (click)="onSearchClick()">Torna alla ricerca</button>
+    </div>
+    <div class="details__map mt-2">
+      <app-aws-map-viewer [pins]="mapPin | async" [zoomToPins]="true" [zoom]="12"></app-aws-map-viewer>
+    </div>
+    <div class="details__name mt-4 text-center">
+      <fa-icon *ngIf="(place$ | async)?.community" icon="users" [ngbTooltip]="'Da community'"></fa-icon>
+      Fontanella{{ (place$ | async)?.streetName ? ' di ' + (place$ | async)?.streetName : '' }}
+    </div>
+    <div *ngIf="(place$ | async)?.streetName" class="details__street text-center">
+      {{ street | async }}
+    </div>
+
+    <div *ngIf="(place$ | async)?.city" class="details__street text-center">
+      {{ city | async }}
+    </div>
+
+    <div class="btn-toolbar d-flex justify-content-center mt-2" role="toolbar">
+      <div *ngIf="loading$ | async" class="mx-2 mt-2">
+        <app-loading [small]="true"></app-loading>
+      </div>
+
+      <button
+        *ngIf="!(loading$ | async)"
+        type="button"
+        class="btn btn-primary mx-2 mt-2"
+        ngbTooltip="Mi piace"
+        [disabled]="isLiked"
+        (click)="onLikeClick()"
+      >
+        <div>
+          <fa-icon icon="thumbs-up"></fa-icon>
+          {{ (place$ | async)?.likes }}
+        </div>
+      </button>
+    </div>
+
+    <div class="details__description mt-3 mb-3 text-center" *ngIf="(place$ | async)?.notes">
+      <strong>Note</strong>
+      <br />{{ (place$ | async)?.notes }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="modal-header add-place-dialog">
+  <span class="flex-grow-1 add-place-dialog__title">Aggiungi una fontanella</span>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <fa-icon icon="times"></fa-icon>
+  </button>
+</div>
+<div class="modal-body add-place-dialog">
+  <div class="row">
+    <div class="col d-none d-md-block col-md-6">
+      <div class="add-place-dialog__map">
+        <app-aws-map-viewer
+          [mapId]="'mapAdd'"
+          [pins]="pins"
+          [zoomToPins]="true"
+          (pinAddCoordinates)="getPinDropCoordinates($event)"
+        ></app-aws-map-viewer>
+      </div>
+    </div>
+    <div class="col col-sm-12 col-md-6">
+      <form [formGroup]="formDate">
+        <div class="row mb-3">
+          <div class="col">
+            <div>Via e numero</div>
+            <input
+              id="street"
+              name="street"
+              class="form-control"
+              formControlName="street"
+              [ngbTooltip]="'Es. Via Roma 1'"
+            />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div>Città</div>
+            <input id="city" name="city" class="form-control" formControlName="city" [ngbTooltip]="'Es. Vicenza'" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div>CAP</div>
+            <input
+              id="istatCode"
+              name="istatCode"
+              class="form-control"
+              formControlName="istatCode"
+              [ngbTooltip]="'Es. 36100'"
+            />
+          </div>
+        </div>
+      </form>
+      <form [formGroup]="form">
+        <div class="row mb-3">
+          <div class="col">
+            <div>Descrizione</div>
+            <textarea id="description" name="description" class="form-control" formControlName="description"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer add-place-dialog justify-content-between">
+  <div class="add-place-dialog__footer-item text-left">
+    <button type="button" class="btn btn-outline-secondary add-place-dialog__button" (click)="dismiss()">
+      Elimina
+    </button>
+  </div>
+  <div class="add-place-dialog__footer-item text-center">
+    <div *ngIf="loading" class="spinner-grow" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div class="add-place-dialog__footer-item text-right">
+    <button type="button" class="btn btn-primary add-place-dialog__button" (click)="close()">Salva</button>
+  </div>
+</div>

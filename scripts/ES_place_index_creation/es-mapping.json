@@ -1,0 +1,52 @@
+{
+  "mappings": {
+    "properties": {
+      "placeId": {
+        "type": "text"
+      },
+      "istatCode": {
+        "type": "keyword"
+      },
+      "streetName": {
+        "type": "text"
+      },
+      "streetNumber": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "city": {
+        "type": "text"
+      },
+      "notes": {
+        "type": "text"
+      },
+      "province": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "location": {
+        "type": "geo_point"
+      },
+      "address": {
+        "type": "text"
+      },
+      "searchable": {
+        "type": "boolean"
+      },
+      "likes": {
+        "type": "integer"
+      },
+      "community": {
+        "type": "boolean"
+      }
+    }
+  }
+}
